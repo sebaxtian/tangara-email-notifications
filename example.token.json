@@ -1,0 +1,9 @@
+{
+    "token": "ya29.h2BAcD2p_12jeK227e1aRP-gQVRae_iOIef7e3j1ja9naP-cKY1Jw9UalI9q0q3fasdad92....",
+    "refresh_token": "1//Jw9UalI9qijCgYIA2BAcD2p_1-L9IrN0nqat_zmx7u7QRae_iOIef7e3j67lvCqq3....",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "client_id": "123456-jasdh98897123hjajbd891jhah.apps.googleusercontent.com",
+    "client_secret": "A0BCD-D-HkoRexWL_P-c8KL85WjO1uEkP9",
+    "scopes": ["https://www.googleapis.com/auth/gmail.send"],
+    "expiry": "2022-06-24T05:04:30.941662Z"
+}
