@@ -40,15 +40,17 @@ jobs:
         THRESHOLD_MINUTES: ${{ secrets.THRESHOLD_MINUTES }}
         THRESHOLD_ATTEMPTS: ${{ secrets.THRESHOLD_ATTEMPTS }}
         FOUNDERS_EMAILS: ${{ secrets.FOUNDERS_EMAILS }}
+        SPREADSHEET_MAILING_LIST: ${{ secrets.SPREADSHEET_MAILING_LIST }}
       run: |
         echo "Running ..."
+        wget https://docs.google.com/spreadsheets/d/$SPREADSHEET_MAILING_LIST/export?format=csv -O input/mailing_list.csv
         python src/notify_subscribers.py -n -s input/sensors.csv
         echo "Finish!"
         # Check any change
         echo $(git status --porcelain)
         if [[ $(git status --porcelain) ]]; then
           echo "Sensors Status Updated"
-          
+
         else
           echo "Not Changes"
         fi
