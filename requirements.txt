@@ -13,7 +13,6 @@ idna==3.3
 numpy==1.23.0
 oauthlib==3.2.0
 pandas==1.4.3
-pkg_resources==0.0.0
 protobuf==4.21.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
