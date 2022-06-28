@@ -45,6 +45,7 @@ jobs:
         echo "Running ..."
         wget https://docs.google.com/spreadsheets/d/$SPREADSHEET_MAILING_LIST/export?format=csv -O input/mailing_list.csv
         cat input/mailing_list.csv
+        echo ""
         python src/notify_subscribers.py -n -s input/sensors.csv
         echo "Finish!"
         # Check any change
@@ -52,6 +53,8 @@ jobs:
         if [[ $(git status --porcelain) ]]; then
           echo "Sensors Status Updated"
           rm -fv input/mailing_list.csv
+          cat output/sensors_status.csv
+          echo ""
           #git config --global user.email 'sebaxtianrioss@gmail.com'
           #git config --global user.name 'Sebastian Rios Sabogal'
           #git add .
