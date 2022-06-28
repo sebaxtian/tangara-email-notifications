@@ -53,32 +53,37 @@ def SetupOptionParser():
     return parser
 
 
-def _GetCredentials():
-    # If modifying these scopes, delete the file token.json.
-    SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+def _Load_Credentials():
     # Credentials
     global CREDENTIALS
     if CREDENTIALS:
         return CREDENTIALS
-    creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+    TOKEN_URI = "https://oauth2.googleapis.com/token"
+    CLIENT_ID = os.getenv("CLIENT_ID")
+    CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+    TOKEN = os.getenv("TOKEN")
+    REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
+    # Credentials
+    CREDENTIALS = Credentials(token=TOKEN, refresh_token=REFRESH_TOKEN, token_uri=TOKEN_URI,
+                              client_id=CLIENT_ID, client_secret=CLIENT_SECRET, scopes=SCOPES)
+    return CREDENTIALS
+
+
+def _GetCredentials():
     # If there are no (valid) credentials available, let the user log in.
+    creds = _Load_Credentials()
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
+            print("Refresh Credentials")
         else:
+            # Please run Get Credentials from Client Secrets File
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                'credentials.json', creds.scopes)
             creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
+            print("Please run Get Credentials from Client Secrets File")
     # Credentials
-    CREDENTIALS = creds
     return creds
 
 
@@ -170,7 +175,7 @@ def NotifySubscribers(sensors_status, sensors):
             "Si el problema persiste, comuniquese con el equipo de Tangara:\n" \
             "Grupo en WhatsApp: https://chat.whatsapp.com/ITyQlokTiBMGrRAfuXVT0j\n" \
             "Gracias."
-        
+
         # Sent Email Notification
         send_message = _SentEmailNotification(
             "sebaxtianrioss@gmail.com", f"{row['EMAIL']}", subject, message)
