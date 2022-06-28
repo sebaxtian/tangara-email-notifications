@@ -4,6 +4,9 @@
 name: Tangara Email Notifications
 
 on:
+  push:
+    branches:
+      - "master"
   schedule:
     - cron: '*/15 * * * *'
 
