@@ -77,17 +77,24 @@ def RequestSensors(csvfile):
     # From results get the InfluxDB Sensors availables
     results = response.json()['results']
     results = [value for value in results if 'series' in value]
-    influxdb_sensors = list(pd.json_normalize(results, record_path=[
-                            'series', 'values']).sort_values(by=[0]).groupby(by=1).groups.keys())
-    available_sensors = pd.DataFrame(data={'MAC': influxdb_sensors})
 
-    # Filter only Available Sensors
-    available_sensors = sensors[sensors['MAC'].isin(available_sensors['MAC'])]
+    available_sensors = pd.DataFrame()
+    unavailable_sensors = pd.DataFrame()
+
+    if len(results) > 0:
+        influxdb_sensors = list(pd.json_normalize(results, record_path=[
+                                'series', 'values']).sort_values(by=[0]).groupby(by=1).groups.keys())
+        available_sensors = pd.DataFrame(data={'MAC': influxdb_sensors})
+
+        # Filter only Available Sensors
+        available_sensors = sensors[sensors['MAC'].isin(
+            available_sensors['MAC'])]
+
+        # Filter only Unavailable Sensors
+        unavailable_sensors = sensors[~sensors['MAC'].isin(
+            available_sensors['MAC'])]
+
     print('Total Available Sensors:', available_sensors.shape[0])
-
-    # Filter only Unavailable Sensors
-    unavailable_sensors = sensors[~sensors['MAC'].isin(
-        available_sensors['MAC'])]
     print('Total Unavailable Sensors: ', unavailable_sensors.shape[0])
 
     return {'sensors': sensors, 'available_sensors': available_sensors, 'unavailable_sensors': unavailable_sensors}
