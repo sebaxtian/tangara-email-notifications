@@ -5,7 +5,7 @@ name: Tangara Email Notifications
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/6 * * * *'
 
 permissions:
   contents: read
