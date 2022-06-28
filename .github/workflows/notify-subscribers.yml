@@ -36,10 +36,13 @@ jobs:
         THRESHOLD_ATTEMPTS: ${{ secrets.THRESHOLD_ATTEMPTS }}
         FOUNDERS_EMAILS: ${{ secrets.FOUNDERS_EMAILS }}
         SPREADSHEET_MAILING_LIST: ${{ secrets.SPREADSHEET_MAILING_LIST }}
+        SPREADSHEET_SENSORS: ${{ secrets.SPREADSHEET_SENSORS }}
       run: |
         echo "Running ..."
         wget https://docs.google.com/spreadsheets/d/$SPREADSHEET_MAILING_LIST/export?format=csv -O input/mailing_list.csv
         #cat input/mailing_list.csv
+        wget https://docs.google.com/spreadsheets/d/$SPREADSHEET_SENSORS/export?format=csv -O input/sensors.csv
+        #cat input/sensors.csv
         echo ""
         python src/notify_subscribers.py -n -s input/sensors.csv
         echo "Finish!"
