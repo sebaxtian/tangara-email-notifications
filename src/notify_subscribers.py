@@ -121,7 +121,8 @@ def _SentEmailNotification(strfrom, strto, strsubject, strmessage):
 
         message['From'] = strfrom
         message['To'] = strto
-        message['Bcc'] = FOUNDERS_EMAILS
+        if strsubject.find("Tangara_") != -1:
+            message['Bcc'] = FOUNDERS_EMAILS
         message['Subject'] = strsubject
 
         message.set_content(strmessage)

@@ -25,7 +25,6 @@ Email notifications related to Tangara Sensors, when any sensor doesn't report d
 }
 ```
 
-
 ## Environment Variables
 
 Setup your own values to environment variables, use the [example.env](./example.env) file, and save your custom values as a **.env** file.
