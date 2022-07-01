@@ -12,6 +12,7 @@ import sys
 import os
 import base64
 import pandas as pd
+import json
 from optparse import OptionParser
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
@@ -53,37 +54,51 @@ def SetupOptionParser():
     return parser
 
 
-def _Load_Credentials():
+def _GetCredentials():
+    # If modifying these scopes, delete the file token.json.
+    SCOPES = ['https://www.googleapis.com/auth/gmail.send']
     # Credentials
     global CREDENTIALS
     if CREDENTIALS:
         return CREDENTIALS
-    SCOPES = ['https://www.googleapis.com/auth/gmail.send']
-    TOKEN_URI = "https://oauth2.googleapis.com/token"
-    CLIENT_ID = os.getenv("CLIENT_ID")
-    CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-    TOKEN = os.getenv("TOKEN")
-    REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
-    # Credentials
-    CREDENTIALS = Credentials(token=TOKEN, refresh_token=REFRESH_TOKEN, token_uri=TOKEN_URI,
-                              client_id=CLIENT_ID, client_secret=CLIENT_SECRET, scopes=SCOPES)
-    return CREDENTIALS
-
-
-def _GetCredentials():
+    creds = None
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.json'):
+        # Open the credentials for the next run
+        with open('token.json', 'r') as token:
+            tokenobj = json.load(token)
+            # Add secret values
+            TOKEN_URI = "https://oauth2.googleapis.com/token"
+            CLIENT_ID = os.getenv("CLIENT_ID")
+            CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+            tokenobj['token_uri'] = TOKEN_URI
+            tokenobj['client_id'] = CLIENT_ID
+            tokenobj['client_secret'] = CLIENT_SECRET
+            tokenobj['scopes'] = SCOPES
+            # Save the credentials for the next run
+            with open('token.json', 'w') as token:
+                token.write(json.dumps(tokenobj))
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     # If there are no (valid) credentials available, let the user log in.
-    creds = _Load_Credentials()
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
-            print("Refresh Credentials")
         else:
-            # Please run Get Credentials from Client Secrets File
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', creds.scopes)
+                'credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
-            print("Please run Get Credentials from Client Secrets File")
+    # Save the credentials for the next run
+    with open('token.json', 'w') as token:
+        tokenobj = eval(creds.to_json())
+        del tokenobj['token_uri']
+        del tokenobj['client_id']
+        del tokenobj['client_secret']
+        del tokenobj['scopes']
+        token.write(json.dumps(tokenobj))
     # Credentials
+    CREDENTIALS = creds
     return creds
 
 

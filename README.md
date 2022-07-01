@@ -15,7 +15,16 @@ Email notifications related to Tangara Sensors, when any sensor doesn't report d
       ***The credentials.json file must be ignored from the repository***
   - **Refresh Token**:
     - This is a **token.json** file created when the script is first to run, this one has a JSON structure similar to the [example.token.json](./example.token.json) file, this file will be used to refresh the Gmail API token.
-      ***The token.json file must be ignored from the repository***
+      ***The token.json file must only have the follow structure:***
+
+```json
+{
+    "token": "ya29.a0ARrdaM-3sywDwFLToHz6CuMI6X7aGzfCsh0VHcv_0S2ykDiHBTQjN_IYllDGop0TEmCdfD_XjLOBhcyQA1wCXUm0ISxyWY0p4Fm33XEeZXj2Zk_4DeC9G_BjehT3ShcRaX5ljQrV83ejBSWEqyeVNRPzhlVn",
+    "refresh_token": "1//0dW7ynmcwPg-LCgYIARAAGA0SNwF-L9IrfnJg9Sy9ZdGrcL1tL9oRzdgTJxdYb86Ww4gL7jnlFn7TGclMekW5VADkJB5YQYiuL1s",
+    "expiry": "2022-07-01T03:31:50.460388Z"
+}
+```
+
 
 ## Environment Variables
 

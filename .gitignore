@@ -130,7 +130,6 @@ dmypy.json
 
 # Gmail API Credentials
 credentials.json
-token.json
 
 # Mailing List
 input/mailing_list.csv
